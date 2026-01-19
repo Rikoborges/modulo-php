@@ -1,16 +1,17 @@
 <?php
-require_once 'connexion.php';
-require_once 'index.php';
+require_once 'db.php';         
+require_once 'voiture.php';    
+require_once 'index.php';     
 
-$host = 'localhost';
-$db   = 'ParcAuto';k
-$user = 'root';
-$pass = ''; 
-$charset = 'utf8mb4';
+$voiture = new Voiture();      
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
+// 
+$voiture->setImmatriculation($_POST['immatriculation']);
+$voiture->setCouleur($_POST['couleur']);
+// 
 
-//
+$pdo = DB::connect(); 
+
 $sql = "INSERT INTO voiture (
     immatriculation, couleur, poids, puissance, capaciteReservoir, niveauEssence, nbPlaces, assure, message
 ) VALUES (
@@ -31,13 +32,4 @@ $stmt->execute([
     'message'             => $voiture->getMessage()
 ]);
 
-try {
-    $pdo = new PDO($dsn, $user, $pass);
-    // 
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    echo "Erreur de connexion : " . $e->getMessage();
-    exit;
-}
-?>
-   
+echo "✅ Voiture insérée avec succès.";
